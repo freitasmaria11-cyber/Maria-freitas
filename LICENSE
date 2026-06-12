@@ -1,21 +1,213 @@
-MIT License
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrinho 2026 - Dashboard Sustentável</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #c8e6c9;
+            --background: #f1f8e9;
+            --dark: #1b5e20;
+            --card-bg: #ffffff;
+            --alert: #d32f2f;
+        }
 
-Copyright (c) 2026 freitasmaria11-cyber
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+        body {
+            background-color: var(--background);
+            color: #333;
+            padding: 20px;
+        }
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 5px solid var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .status.ok { background-color: var(--primary-light); color: var(--dark); }
+        .status.alert { background-color: #ffcdd2; color: var(--alert); }
+
+        .btn-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: var(--dark);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #0d3c12;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 5px;
+            padding: 30px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Agrinho 2026</h1>
+        <p>Agro forte, futuro sustentável: equilíbrio entre produção e meio ambiente</p>
+    </header>
+
+    <main class="grid">
+        <div class="card">
+            <h3>Temperatura do Ar</h3>
+            <div class="value" id="temp-val">26.5°C</div>
+            <div class="status ok" id="temp-status">Ideal</div>
+        </div>
+
+        <div class="card">
+            <h3>Umidade do Ar</h3>
+            <div class="value" id="umi-ar-val">62%</div>
+            <div class="status ok" id="umi-ar-status">Estável</div>
+        </div>
+
+        <div class="card">
+            <h3>Umidade do Solo</h3>
+            <div class="value" id="solo-val">45%</div>
+            <div class="status ok" id="solo-status">Úmido</div>
+        </div>
+
+        <div class="card" style="border-top-color: #0288d1;">
+            <h3>Bomba de Irrigação</h3>
+            <div class="value" id="bomba-val" style="color: #0288d1;">DESLIGADA</div>
+            <div class="status ok" id="bomba-status" style="background-color: #e1f5fe; color: #0288d1;">Economizando Água</div>
+        </div>
+
+        <div class="btn-container">
+            <button onclick="simularVariacao()">Simular Variação de Clima (Tempo Real)</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>Projeto Escolar focado em Metas ODS - Uso Inteligente de Recursos Hídricos</p>
+    </footer>
+
+    <script>
+        // Função apenas para simular os sensores mudando de valor na tela de forma inteligente
+        function simularVariacao() {
+            // Gera valores aleatórios realistas
+            const novaTemp = (22 + Math.random() * 12).toFixed(1);
+            const novaUmiAr = Math.floor(40 + Math.random() * 45);
+            const novaUmiSolo = Math.floor(20 + Math.random() * 70);
+
+            // Atualiza os elementos na tela
+            document.getElementById('temp-val').innerText = novaTemp + '°C';
+            document.getElementById('umi-ar-val').innerText = novaUmiAr + '%';
+            document.getElementById('solo-val').innerText = novaUmiSolo + '%';
+
+            // Lógica visual de Alerta para o Solo e Bomba
+            const soloStatus = document.getElementById('solo-status');
+            const bombaVal = document.getElementById('bomba-val');
+            const bombaStatus = document.getElementById('bomba-status');
+
+            if (novaUmiSolo < 40) {
+                // Solo Seco
+                soloStatus.innerText = 'Crítico / Seco';
+                soloStatus.className = 'status alert';
+                
+                bombaVal.innerText = 'LIGADA';
+                bombaVal.style.color = '#d32f2f';
+                bombaStatus.innerText = 'Corrigindo Umidade';
+                bombaStatus.style.backgroundColor = '#ffcdd2';
+                bombaStatus.style.color = '#d32f2f';
+            } else {
+                // Solo Saudável
+                soloStatus.innerText = 'Úmido';
+                soloStatus.className = 'status ok';
+
+                bombaVal.innerText = 'DESLIGADA';
+                bombaVal.style.color = '#0288d1';
+                bombaStatus.innerText = 'Economizando Água';
+                bombaStatus.style.backgroundColor = '#e1f5fe';
+                bombaStatus.style.color = '#0288d1';
+            }
+        }
+    </script>
+</body>
+</html>
